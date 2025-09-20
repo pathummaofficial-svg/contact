@@ -1,10 +1,13 @@
 <?php
+// Database connection
 $con = mysqli_connect("localhost", "root", "", "your_db_name");
+
+// Check connection
 if (!$con) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Collect POST data
+// Collect form data
 $custName = trim($_POST['custName']);
 $custEmail = trim($_POST['custEmail']);
 $custPhone = trim($_POST['custPhone']);
@@ -17,8 +20,10 @@ if (empty($custName) || empty($custEmail) || empty($custPhone)) {
 } elseif (!preg_match("/^[0-9]{10}$/", $custPhone)) {
     echo "Error: Phone must be 10 digits.";
 } else {
+    // Prepare SQL query
     $sql = "INSERT INTO Customer (custName, custEmail, custPhone) 
             VALUES ('$custName', '$custEmail', '$custPhone')";
+    
     if (mysqli_query($con, $sql)) {
         echo "Record inserted successfully!";
     } else {
@@ -26,5 +31,6 @@ if (empty($custName) || empty($custEmail) || empty($custPhone)) {
     }
 }
 
+// Close connection
 mysqli_close($con);
 ?>
