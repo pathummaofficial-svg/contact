@@ -1,25 +1,30 @@
 <?php
-	$firstName = $_POST['firstName'];
-	$lastName = $_POST['lastName'];
-	$gender = $_POST['gender'];
-	$email = $_POST['email'];
-	$password = $_POST['password'];
-	$number = $_POST['number'];
+$con = mysqli_connect("localhost", "root", "", "your_db_name");
+if (!$con) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-	// Database connection
-	$con = new mysqli('localhost','root','','test');
-	if($con->connect_error){
-		echo "$con->connect_error";
-		die("Connection Failed : ". $con->connect_error);
-	} else {
-		$stmt = $con->prepare("insert into registration(firstName, lastName, gender, email, password, number) values(?, ?, ?, ?, ?, ?)");
-		$stmt->bind_param("sssssi", $firstName, $lastName, $gender, $email, $password, $number);
-		$execval = $stmt->execute();
-		echo $execval;
-		echo "Registration successfully...";
-		$stmt->close();
-		$con->close();
-	}
+// Collect POST data
+$custName = trim($_POST['custName']);
+$custEmail = trim($_POST['custEmail']);
+$custPhone = trim($_POST['custPhone']);
+
+// Validation
+if (empty($custName) || empty($custEmail) || empty($custPhone)) {
+    echo "Error: All fields are mandatory.";
+} elseif (!filter_var($custEmail, FILTER_VALIDATE_EMAIL)) {
+    echo "Error: Invalid email format.";
+} elseif (!preg_match("/^[0-9]{10}$/", $custPhone)) {
+    echo "Error: Phone must be 10 digits.";
+} else {
+    $sql = "INSERT INTO Customer (custName, custEmail, custPhone) 
+            VALUES ('$custName', '$custEmail', '$custPhone')";
+    if (mysqli_query($con, $sql)) {
+        echo "Record inserted successfully!";
+    } else {
+        echo "Database Error: " . mysqli_error($con);
+    }
+}
+
+mysqli_close($con);
 ?>
-
-
