@@ -7,12 +7,12 @@
 	$number = $_POST['number'];
 
 	// Database connection
-	$conn = new mysqli('localhost','root','','test');
-	if($conn->connect_error){
-		echo "$conn->connect_error";
-		die("Connection Failed : ". $conn->connect_error);
+	$con = new mysqli('localhost','root','','test');
+	if($con->connect_error){
+		echo "$con->connect_error";
+		die("Connection Failed : ". $con->connect_error);
 	} else {
-		$stmt = $conn->prepare("insert into registration(firstName, lastName, gender, email, password, number) values(?, ?, ?, ?, ?, ?)");
+		$stmt = $con->prepare("insert into registration(firstName, lastName, gender, email, password, number) values(?, ?, ?, ?, ?, ?)");
 		$stmt->bind_param("sssssi", $firstName, $lastName, $gender, $email, $password, $number);
 		$execval = $stmt->execute();
 		echo $execval;
@@ -21,3 +21,4 @@
 		$conn->close();
 	}
 ?>
+
