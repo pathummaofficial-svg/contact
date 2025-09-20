@@ -18,7 +18,8 @@
 		echo $execval;
 		echo "Registration successfully...";
 		$stmt->close();
-		$conn->close();
+		$con->close();
 	}
 ?>
+
 
